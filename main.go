@@ -26,11 +26,11 @@ func gameSelect(c echo.Context) error {
 }
 
 func phasmoPage(c echo.Context) error {
-	return c.Render(http.StatusOK, "phasmo", nil)
+	return c.Render(http.StatusOK, "index", nil)
 }
 
 func terrPage(c echo.Context) error {
-	return c.Render(http.StatusOK, "terr", nil)
+	return c.Render(http.StatusOK, "index", nil)
 }
 
 type Template struct {
