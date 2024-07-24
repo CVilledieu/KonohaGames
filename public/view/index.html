@@ -4,42 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <script src="/public/htmx/htmx.min.js"></script>
+    {{template "Select_Header_tmpl"}}
 </head>
 <body>
-    <div class="root">
-       
-        {{template "Pha_Container_tmpl" . }}
+    <div class="root">       
+        {{template "Game_Select_tmpl" . }}
     </div>
 </body>
 </html>
 {{end}}
 
-{{define "Pha_Container_tmpl"}}
-    {{range . }}
+{{define "Select_Header_tmpl"}}
+    <title>Konoha Games</title>
+    <link rel="stylesheet" href="/public/view/index.css">
+{{end}}
+
+
+
+{{define "Game_Select_tmpl"}}
     <div>
-        {{template "Pha_Evidence_tmpl"}}
+        <div class="Game_Select_Message">
+            <h2>Which game?</h2>
+        </div>
+        <div class="Game_Select_btns">
+            <div hx-get="/Phasmo" hx-trigger="Click">Phasmo</div>
+            <button hx-put="/Terraria">Terraria</button>
+        </div>
     </div>
-    {{end}}
-    
-    {{range . }}
-        <div>
-            {{template "Pha_Ghost_tmpl"}}
-        </div>
-    {{end}}
 {{end}}
-
-
-{{define "Pha_Evidence_tmpl"}}
-        <div class="Pha_Evidence_div">
-            <div class="Pha_Evidence_name"></div>
-        </div>
-{{end}}
-
-
-{{define "Pha_Ghost_tmpl"}}
-    <div class="ghost_name_div"></div>
-    <div class="ghost_evidence_div"></div>
-    <div class="ghost_other_div"></div>
-{{end}}
-

@@ -15,8 +15,8 @@ func main() {
 	e.Renderer = newTemplate()
 
 	e.GET("/", gameSelect)
-	e.GET("/Phasmo", phasmoPage)
-	e.GET("/Terraria", terrPage)
+	e.PUT("/Phasmo", phasmoPage)
+	e.PUT("/Terraria", terrPage)
 
 	e.Logger.Fatal(e.Start(":4242"))
 }
@@ -43,6 +43,6 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 
 func newTemplate() *Template {
 	return &Template{
-		templates: template.Must(template.ParseGlob("public/views/html/*.html")),
+		templates: template.Must(template.ParseGlob("public/view/*.html")),
 	}
 }
