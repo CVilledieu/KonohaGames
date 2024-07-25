@@ -1,23 +1,55 @@
-{{define "Pha_Container_tmpl"}}
-    {{range . }}
-    <div>
-        {{template "Pha_Evidence_tmpl"}}
+{{block "Phasmo" .BaseInfo}} 
+<div class="PhasmoRoot">
+    <div class="PhasmoTitle">
+        <h1>Welcome to Phasmo</h1>
     </div>
-    {{end}}
-    
-    {{range . }}
-        <div>
-            {{template "Pha_Ghost_tmpl"}}
+    <div class="PhasmoSession">
+        <button hx-post="/PhasmoStart">New session</button>
+    </div>
+<hr/>
+    <div class="EvidenceContainer">
+        {{range .Evidences}}
+            <div class="Evidence">
+                <input type="checkbox" id={{.EvidenceName}}/>
+                <label for={{.EvidenceName}}>{{.EvidenceName}}</label>
+            </div>
+        {{end}}
+    </div>
+<hr/>
+    <div class="GhostContainer">
+        {{range .Ghosts }}
+        <div class="Ghost">
+            <input type="checkbox" id={{.GhostName}} />
+            <label for={{.GhostName}}>{{.GhostName}}</label>
+            <p>{{.Tips}}</p>
         </div>
-    {{end}}
+        {{end}}
+    </div>
+</div>
+</div>
 {{end}}
 
-
-{{define "Pha_Evidence_tmpl"}}
-        <div class="Pha_Evidence_div">
-            <div class="Pha_Evidence_name"></div>
-        </div>
+{{define "PhasmoGameSession"}}
+<div class="PhasmoSessionInfo">
+    Current Number of complete jobs: 
+    <div class="PhasmoSessionBtns">
+        <button hx-put="/PhasmoSubmitJob">Submit job</button>
+    </div>
+</div>
 {{end}}
+
+{{define "PhasmoSubmittedGame"}}
+<div>
+    <div>Were you correct?</div>
+    <div>
+        <button>Correct</button>
+        <button>Incorrect</button>
+        <input type="checkbox" id="EndSession"/>
+        <label for="EndSession">End Session?</label>
+    </div>
+</div>
+{{end}}
+
 
 
 {{define "Pha_Ghost_tmpl"}}
@@ -25,4 +57,3 @@
     <div class="ghost_evidence_div"></div>
     <div class="ghost_other_div"></div>
 {{end}}
-

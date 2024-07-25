@@ -1,22 +1,24 @@
 package main
 
 import (
+	Phasmo "GameSite/GameSpec/Phasmo"
 	"io"
 	"net/http"
 	"text/template"
 
 	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
 	e := echo.New()
-	e.Use(middleware.Static("/public"))
+	e.Static("/static", "public")
 	e.Renderer = newTemplate()
 
 	e.GET("/", gameSelect)
-	e.PUT("/Phasmo", phasmoPage)
-	e.PUT("/Terraria", terrPage)
+	e.GET("/Phasmo", phasmoPage)
+	e.GET("/Terraria", terrPage)
+
+	e.GET("/PhasmoHeader", phasmoHeader)
 
 	e.Logger.Fatal(e.Start(":4242"))
 }
@@ -26,7 +28,9 @@ func gameSelect(c echo.Context) error {
 }
 
 func phasmoPage(c echo.Context) error {
-	return c.Render(http.StatusOK, "index", nil)
+
+	PhasmoBaseInfo := Phasmo.GetBaseInfo()
+	return c.Render(http.StatusOK, "Phasmo", PhasmoBaseInfo)
 }
 
 func terrPage(c echo.Context) error {
@@ -45,4 +49,8 @@ func newTemplate() *Template {
 	return &Template{
 		templates: template.Must(template.ParseGlob("public/view/*.html")),
 	}
+}
+
+func phasmoHeader(c echo.Context) error {
+	return c.Render(http.StatusOK, "PhasmoHeader", nil)
 }

@@ -4,32 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="/public/htmx/htmx.min.js"></script>
-    {{template "Select_Header_tmpl"}}
+    <script src="/static/htmx/htmx.min.js"></script>
+    <title>Konoha Games</title>
+    <link rel="stylesheet" href="/static/view/css/style.css">
+    <link rel="stylesheet" href="/static/view/css/pstyle.css">
+
 </head>
 <body>
-    <div class="root">       
-        {{template "Game_Select_tmpl" . }}
-    </div>
+    <div class="Root">
+        {{template "Game_Select_tmpl"}}
+    </div>      
 </body>
 </html>
 {{end}}
 
-{{define "Select_Header_tmpl"}}
-    <title>Konoha Games</title>
-    <link rel="stylesheet" href="/public/view/index.css">
-{{end}}
 
 
 
 {{define "Game_Select_tmpl"}}
-    <div>
-        <div class="Game_Select_Message">
+<div class="SelectGame">
+    <div class="SelectGameBox">
+        <div class="GameSelectMsg">
             <h2>Which game?</h2>
         </div>
-        <div class="Game_Select_btns">
-            <div hx-get="/Phasmo" hx-trigger="Click">Phasmo</div>
-            <button hx-put="/Terraria">Terraria</button>
+        <div class="GameSelectBtns">
+            <button hx-get="/Phasmo" hx-target=".Root" hx-swap="innerHTML">Phasmo</button>
+            <button hx-get="/Terraria">Terraria</button>
+            <button hx-get="/Terraria">Path of Exile</button>
+            <button hx-get="/Terraria">Satisfactory</button>
+            
         </div>
     </div>
+</div>
 {{end}}
