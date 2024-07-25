@@ -1,7 +1,7 @@
 # Konoha Games
 <p> A simple website hosting tips, tools, and guides for games.</p>
 
-<p>Server is running with Go. The server uses the [Echo] (https://echo.labstack.com/)  framework. </br>
+<p>Server is running with Go. The server uses the <a href="https://echo.labstack.com/">Echo</a> framework. </br>
 The front end is a simple mix of HTMX, HTML, and CSS
 </p>
 
@@ -9,6 +9,6 @@ The front end is a simple mix of HTMX, HTML, and CSS
 
 
 </br>
----
+<hr/>
 
 ## Thanks for stopping bye
