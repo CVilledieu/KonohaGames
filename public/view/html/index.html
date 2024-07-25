@@ -1,0 +1,38 @@
+{{block "index" .}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/static/htmx/htmx.min.js"></script>
+    <title>Konoha Games</title>
+    <link id="style" rel="stylesheet" href="/static/view/css/index.css">
+
+</head>
+<body>
+    <div class="Root">
+        {{template "Game_Select_tmpl"}}
+    </div>      
+</body>
+</html>
+{{end}}
+
+
+
+
+{{define "Game_Select_tmpl"}}
+<div class="SelectGame">
+    <div class="SelectGameBox">
+        <div class="GameSelectMsg">
+            <h2>Which game?</h2>
+        </div>
+        <div class="GameSelectBtns">
+            <button hx-get="/Phasmo" hx-target=".Root" hx-swap="outerHTML">Phasmo</button>
+            <button hx-get="/Terraria">Terraria</button>
+            <button hx-get="/Terraria">Path of Exile</button>
+            <button hx-get="/Terraria">Satisfactory</button>
+            
+        </div>
+    </div>
+</div>
+{{end}}

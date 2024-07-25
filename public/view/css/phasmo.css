@@ -1,0 +1,50 @@
+body{
+    margin: 0;
+}
+.PhasmoRoot{
+    padding: 0;
+    margin: 0;
+    background-color: #27374D;
+    min-height: 100vh;
+    min-width: 100vw;
+    position: absolute;
+    color: #DDE6ED;
+}
+
+
+.PhasmoHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+hr{
+    border-color:#DDE6ED;
+}
+
+.EvidenceContainer{
+    display:flex;
+    flex-wrap: wrap;
+    gap:10px;
+}
+
+.Evidence {
+    background-color: #526D82;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+
+.GhostContainer{
+    display: flex;
+    flex-wrap: wrap;
+    gap:10px;
+}
+
+.Ghost{
+    background-color: #526D82;
+    border-radius: 10px;
+    padding: 20px;
+}

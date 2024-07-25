@@ -18,7 +18,7 @@ func main() {
 	e.GET("/Phasmo", phasmoPage)
 	e.GET("/Terraria", terrPage)
 
-	e.GET("/PhasmoHeader", phasmoHeader)
+	e.POST("/PhasmoStart", phasmoSession)
 
 	e.Logger.Fatal(e.Start(":4242"))
 }
@@ -47,10 +47,10 @@ func (t *Template) Render(w io.Writer, name string, data interface{}, c echo.Con
 
 func newTemplate() *Template {
 	return &Template{
-		templates: template.Must(template.ParseGlob("public/view/*.html")),
+		templates: template.Must(template.ParseGlob("public/view/html/*.html")),
 	}
 }
 
-func phasmoHeader(c echo.Context) error {
-	return c.Render(http.StatusOK, "PhasmoHeader", nil)
+func phasmoSession(c echo.Context) error {
+	return c.Render(http.StatusOK, "PhasmoGameSession", nil)
 }

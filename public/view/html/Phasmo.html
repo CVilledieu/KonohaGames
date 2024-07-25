@@ -1,0 +1,56 @@
+{{block "Phasmo" .BaseInfo}} 
+<link id="style" hx-swap-oob="true" rel="stylesheet" href="/static/view/css/phasmo.css">
+<div class="PhasmoRoot">
+    <div class="PhasmoHeader">
+        <div class="PhasmoTitle">
+            <h1>Welcome to Phasmo</h1>
+        </div>
+        <div class="PhasmoSession">
+            <button hx-post="/PhasmoStart" hx-target=".PhasmoSession" hax-swap="outerHTML">New session</button>
+        </div>
+    </div>
+<hr/>
+    <div class="EvidenceContainer">
+        {{range .Evidences}}
+            <div class="Evidence">
+                <input type="checkbox" id={{.EvidenceName}}/>
+                <label for={{.EvidenceName}}>{{.EvidenceName}}</label>
+            </div>
+        {{end}}
+    </div>
+<hr/>
+    <div class="GhostContainer">
+        {{range .Ghosts }}
+        <div class="Ghost">            
+            <label>{{.GhostName}}</label>
+            <hr />
+            <p>{{.Tips}}</p>
+            <input type="checkbox" id={{.GhostName}} />
+        </div>
+        {{end}}
+    </div>
+</div>
+</div>
+{{end}}
+
+{{define "PhasmoGameSession"}}
+<div class="PhasmoSessionInfo">
+    Current Number of complete jobs: 
+    <div class="PhasmoSessionBtns">
+        <button hx-put="/PhasmoSubmitJob">Submit job</button>
+    </div>
+</div>
+{{end}}
+
+{{define "PhasmoSubmittedGame"}}
+<div>
+    <div>Were you correct?</div>
+    <div>
+        <button>Correct</button>
+        <button>Incorrect</button>
+        <input type="checkbox" id="EndSession"/>
+        <label for="EndSession">End Session?</label>
+    </div>
+</div>
+{{end}}
+
