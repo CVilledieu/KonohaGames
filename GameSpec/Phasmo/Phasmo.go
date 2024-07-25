@@ -1,12 +1,24 @@
 package Phasmo
 
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
+
+const (
+	GHOSTCOUNT = 24
+)
+
 type Evidence struct {
 	EvidenceName string
 }
 
 type Ghost struct {
-	GhostName string
-	Tips      string
+	Id            string
+	GhostName     string
+	GhostEvidence []string
+	Tips          []string
 }
 
 type BaseInfo struct {
@@ -25,12 +37,16 @@ func GetEvidence() []Evidence {
 }
 
 func GetGhosts() []Ghost {
-	names := []string{"Spirit", "Wraith", "Phantom", "Poltergeist", "Banshee", "Jinn", "Oni"}
-	tip := []string{"Spooky", "Spooky", "Spooky", "Spooky", "Spooky", "Spooky", "Spooky"}
-	AllGhost := make([]Ghost, len(names))
-	for i := range AllGhost {
-
-		AllGhost[i] = Ghost{GhostName: names[i], Tips: tip[i]}
+	AllGhost := make([]Ghost, GHOSTCOUNT)
+	JReader, err := os.ReadFile("public/json/ghosts.json")
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	err = json.Unmarshal(JReader, &AllGhost)
+	if err != nil {
+		fmt.Println(err)
+		return nil
 	}
 	return AllGhost
 }

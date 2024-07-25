@@ -1,3 +1,5 @@
+
+
 body{
     margin: 0;
 }
@@ -6,7 +8,7 @@ body{
     margin: 0;
     background-color: #27374D;
     min-height: 100vh;
-    min-width: 100vw;
+    min-width: 95vw;
     position: absolute;
     color: #DDE6ED;
 }
@@ -16,8 +18,6 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding-left: 10px;
-    padding-right: 20px;
 }
 
 hr{
@@ -27,6 +27,7 @@ hr{
 .EvidenceContainer{
     display:flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap:10px;
 }
 
@@ -39,6 +40,7 @@ hr{
 
 .GhostContainer{
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
     gap:10px;
 }
@@ -46,5 +48,34 @@ hr{
 .Ghost{
     background-color: #526D82;
     border-radius: 10px;
-    padding: 20px;
+    min-width: 20vw;
+    min-height: 20vh;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    .GhostName{
+        color: #27374D;
+        align-self: center;
+
+    }
+    .GhostEvidenceList{
+        padding: 10px;
+        background-color: #27374D;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-around;
+
+    }
+
+    .GhostTipsDiv{
+        background-color: #27374D;
+        border-radius: 10px;
+        ul{
+            list-style-type: none;
+        }
+    }
+
 }
+

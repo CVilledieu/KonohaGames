@@ -5,52 +5,45 @@
         <div class="PhasmoTitle">
             <h1>Welcome to Phasmo</h1>
         </div>
-        <div class="PhasmoSession">
-            <button hx-post="/PhasmoStart" hx-target=".PhasmoSession" hax-swap="outerHTML">New session</button>
-        </div>
     </div>
 <hr/>
     <div class="EvidenceContainer">
-        {{range .Evidences}}
-            <div class="Evidence">
-                <input type="checkbox" id={{.EvidenceName}}/>
-                <label for={{.EvidenceName}}>{{.EvidenceName}}</label>
-            </div>
-        {{end}}
+        {{template "EvidenceTmpl" . }}
     </div>
 <hr/>
     <div class="GhostContainer">
-        {{range .Ghosts }}
-        <div class="Ghost">            
-            <label>{{.GhostName}}</label>
-            <hr />
-            <p>{{.Tips}}</p>
-            <input type="checkbox" id={{.GhostName}} />
+        {{template "GhostsTmpl" .}}
+    </div>
+</div>
+</div>
+{{end}}
+
+{{block "EvidenceTmpl" . }}
+    {{range .Evidences}}
+        <div class="Evidence">
+            <label>{{.EvidenceName}}</label>
         </div>
-        {{end}}
-    </div>
-</div>
-</div>
+    {{end}}
 {{end}}
 
-{{define "PhasmoGameSession"}}
-<div class="PhasmoSessionInfo">
-    Current Number of complete jobs: 
-    <div class="PhasmoSessionBtns">
-        <button hx-put="/PhasmoSubmitJob">Submit job</button>
-    </div>
-</div>
-{{end}}
 
-{{define "PhasmoSubmittedGame"}}
-<div>
-    <div>Were you correct?</div>
-    <div>
-        <button>Correct</button>
-        <button>Incorrect</button>
-        <input type="checkbox" id="EndSession"/>
-        <label for="EndSession">End Session?</label>
-    </div>
-</div>
-{{end}}
 
+{{ block "GhostsTmpl" . }}
+    {{range .Ghosts }}
+    <div class="Ghost">            
+        <div class="GhostName"><h2>{{.GhostName}}</h2></div>
+            <div class="GhostEvidenceList">
+            {{range .GhostEvidence}}
+                <div>{{.}}</div>
+            {{end}} 
+            </div>
+        <div class="GhostTipsDiv">
+            <ul>
+                {{range .Tips}}
+                    <li>{{.}}</li>
+                {{end}}
+            </ul>
+        </div>
+    </div>
+    {{end}}
+{{end}}

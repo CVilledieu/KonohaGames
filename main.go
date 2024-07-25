@@ -1,5 +1,11 @@
 package main
 
+/*
+Listening to port :4242
+
+
+*/
+
 import (
 	Phasmo "GameSite/GameSpec/Phasmo"
 	"io"
@@ -13,30 +19,39 @@ func main() {
 	e := echo.New()
 	e.Static("/static", "public")
 	e.Renderer = newTemplate()
-
 	e.GET("/", gameSelect)
-	e.GET("/Phasmo", phasmoPage)
-	e.GET("/Terraria", terrPage)
 
+	//Phasmo HTTP requests
+	e.GET("/Phasmo", phasmoPage)
 	e.POST("/PhasmoStart", phasmoSession)
+
+	//Terraria HTTP requests
+	e.GET("/Terraria", terrPage)
 
 	e.Logger.Fatal(e.Start(":4242"))
 }
 
+// Home page server components
 func gameSelect(c echo.Context) error {
 	return c.Render(http.StatusOK, "index", nil)
 }
 
+// Phasmo server components
 func phasmoPage(c echo.Context) error {
-
 	PhasmoBaseInfo := Phasmo.GetBaseInfo()
 	return c.Render(http.StatusOK, "Phasmo", PhasmoBaseInfo)
 }
 
+func phasmoSession(c echo.Context) error {
+	return c.Render(http.StatusOK, "PhasmoGameSession", nil)
+}
+
+// Terraria server components
 func terrPage(c echo.Context) error {
 	return c.Render(http.StatusOK, "index", nil)
 }
 
+// Core server components
 type Template struct {
 	templates *template.Template
 }
@@ -49,8 +64,4 @@ func newTemplate() *Template {
 	return &Template{
 		templates: template.Must(template.ParseGlob("public/view/html/*.html")),
 	}
-}
-
-func phasmoSession(c echo.Context) error {
-	return c.Render(http.StatusOK, "PhasmoGameSession", nil)
 }
