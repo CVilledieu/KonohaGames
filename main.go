@@ -20,10 +20,18 @@ func main() {
 	e.Static("/static", "public")
 	e.Renderer = newTemplate()
 	e.GET("/", gameSelect)
+	Ghosts := Phasmo.GetGhosts()
 
 	//Phasmo HTTP requests
-	e.GET("/Phasmo", phasmoPage)
-	e.POST("/PhasmoStart", phasmoSession)
+	e.GET("/Phasmo", func(c echo.Context) error {
+		PhasmoBaseInfo := Phasmo.GetBaseInfo()
+		return c.Render(http.StatusOK, "Phasmo", PhasmoBaseInfo)
+	})
+
+	e.POST("/PhasmoGhostSearch", func(c echo.Context) error {
+
+		return c.Render(http.StatusOK, "PhasmoGameSession", nil)
+	})
 
 	//Terraria HTTP requests
 	e.GET("/Terraria", terrPage)
@@ -34,16 +42,6 @@ func main() {
 // Home page server components
 func gameSelect(c echo.Context) error {
 	return c.Render(http.StatusOK, "index", nil)
-}
-
-// Phasmo server components
-func phasmoPage(c echo.Context) error {
-	PhasmoBaseInfo := Phasmo.GetBaseInfo()
-	return c.Render(http.StatusOK, "Phasmo", PhasmoBaseInfo)
-}
-
-func phasmoSession(c echo.Context) error {
-	return c.Render(http.StatusOK, "PhasmoGameSession", nil)
 }
 
 // Terraria server components

@@ -19,24 +19,25 @@
 {{end}}
 
 {{block "EvidenceTmpl" . }}
-    {{range .Evidences}}
-        <div class="Evidence">
-            <label>{{.EvidenceName}}</label>
-        </div>
-    {{end}}
+{{range .Evidences}}
+    <div class="Evidence">
+        <label>{{.EvidenceName}}</label>
+    </div>
+{{end}}
 {{end}}
 
 
 
 {{ block "GhostsTmpl" . }}
     {{range .Ghosts }}
-    <div class="Ghost">            
+    <div class="Ghost">         
         <div class="GhostName"><h2>{{.GhostName}}</h2></div>
-            <div class="GhostEvidenceList">
-            {{range .GhostEvidence}}
-                <div>{{.}}</div>
-            {{end}} 
-            </div>
+        <div class="GhostEvidenceList">
+        {{range .GhostEvidence}}
+            <div class="GhostEvidenceSingle">{{.}}</div>
+        {{end}} 
+        </div>
+
         <div class="GhostTipsDiv">
             <ul>
                 {{range .Tips}}

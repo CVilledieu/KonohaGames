@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"slices"
 )
 
 const (
@@ -12,6 +13,7 @@ const (
 
 type Evidence struct {
 	EvidenceName string
+	found        bool
 }
 
 type Ghost struct {
@@ -53,4 +55,13 @@ func GetGhosts() []Ghost {
 
 func GetBaseInfo() BaseInfo {
 	return BaseInfo{Evidences: GetEvidence(), Ghosts: GetGhosts()}
+}
+
+func SelectEvidence(ruledOut, found []Evidence, currentOptions []Ghost) []Ghost {
+	Ghosts := currentOptions
+	for _, ev := range found {
+		for _, g := range Ghosts {
+			slices.Contains(g.GhostEvidence, ev.EvidenceName)
+		}
+	}
 }
