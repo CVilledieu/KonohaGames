@@ -20,7 +20,6 @@ func main() {
 	e.Static("/static", "public")
 	e.Renderer = newTemplate()
 	e.GET("/", gameSelect)
-	Ghosts := Phasmo.GetGhosts()
 
 	//Phasmo HTTP requests
 	e.GET("/Phasmo", func(c echo.Context) error {

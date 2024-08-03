@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"slices"
 )
 
 const (
@@ -12,15 +11,14 @@ const (
 )
 
 type Evidence struct {
-	EvidenceName string
-	found        bool
+	Name string
 }
 
 type Ghost struct {
-	Id            string
-	GhostName     string
-	GhostEvidence []string
-	Tips          []string
+	Id       string
+	Name     string
+	Evidence []string
+	Tips     []string
 }
 
 type BaseInfo struct {
@@ -28,17 +26,17 @@ type BaseInfo struct {
 	Ghosts    []Ghost
 }
 
-func GetEvidence() []Evidence {
+func GetAllEvidence() []Evidence {
 	names := []string{"Spirit Box", "Freezing Temps", "Ultraviolet", "Ghost Orbs", "EMF", "Ghost Writing", "D.O.T.S."}
 	AllEvidence := make([]Evidence, len(names))
 	for i, n := range names {
 
-		AllEvidence[i] = Evidence{EvidenceName: n}
+		AllEvidence[i] = Evidence{Name: n}
 	}
 	return AllEvidence
 }
 
-func GetGhosts() []Ghost {
+func GetAllGhosts() []Ghost {
 	AllGhost := make([]Ghost, GHOSTCOUNT)
 	JReader, err := os.ReadFile("public/json/ghosts.json")
 	if err != nil {
@@ -54,14 +52,24 @@ func GetGhosts() []Ghost {
 }
 
 func GetBaseInfo() BaseInfo {
-	return BaseInfo{Evidences: GetEvidence(), Ghosts: GetGhosts()}
+	return BaseInfo{Evidences: GetAllEvidence(), Ghosts: GetAllGhosts()}
 }
 
-func SelectEvidence(ruledOut, found []Evidence, currentOptions []Ghost) []Ghost {
-	Ghosts := currentOptions
-	for _, ev := range found {
-		for _, g := range Ghosts {
-			slices.Contains(g.GhostEvidence, ev.EvidenceName)
-		}
-	}
+type Hunt struct {
+	PossibleEvidence []Evidence
+	RuledOutEvidence []Evidence
+	PossibleGhosts   []Ghost
+	RuledOutGhosts   []Ghost
+}
+
+func getNewHunt() Hunt {
+	return Hunt{PossibleEvidence: GetAllEvidence(), PossibleGhosts: GetAllGhosts()}
+}
+
+func (h Hunt) RuleOutEvidence(ev Evidence) {
+	h.RuledOutEvidence = append(h.RuledOutEvidence, ev)
+}
+
+func (h Hunt) RuleOutGhost(g Ghost) {
+	h.RuledOutGhosts = append(h.RuledOutGhosts, g)
 }
