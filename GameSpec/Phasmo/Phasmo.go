@@ -10,11 +10,11 @@ const (
 	GHOSTCOUNT = 24
 )
 
-type Evidence struct {
+type _Evidence struct {
 	Name string
 }
 
-type Ghost struct {
+type _Ghost struct {
 	Id       string
 	Name     string
 	Evidence []string
@@ -22,22 +22,22 @@ type Ghost struct {
 }
 
 type BaseInfo struct {
-	Evidences []Evidence
-	Ghosts    []Ghost
+	Evidences []_Evidence
+	Ghosts    []_Ghost
 }
 
-func GetAllEvidence() []Evidence {
+func GetAllEvidence() []_Evidence {
 	names := []string{"Spirit Box", "Freezing Temps", "Ultraviolet", "Ghost Orbs", "EMF", "Ghost Writing", "D.O.T.S."}
-	AllEvidence := make([]Evidence, len(names))
+	AllEvidence := make([]_Evidence, len(names))
 	for i, n := range names {
 
-		AllEvidence[i] = Evidence{Name: n}
+		AllEvidence[i] = _Evidence{Name: n}
 	}
 	return AllEvidence
 }
 
-func GetAllGhosts() []Ghost {
-	AllGhost := make([]Ghost, GHOSTCOUNT)
+func GetAllGhosts() []_Ghost {
+	AllGhost := make([]_Ghost, GHOSTCOUNT)
 	JReader, err := os.ReadFile("public/json/ghosts.json")
 	if err != nil {
 		fmt.Println(err)
@@ -55,21 +55,20 @@ func GetBaseInfo() BaseInfo {
 	return BaseInfo{Evidences: GetAllEvidence(), Ghosts: GetAllGhosts()}
 }
 
-type Hunt struct {
-	PossibleEvidence []Evidence
-	RuledOutEvidence []Evidence
-	PossibleGhosts   []Ghost
-	RuledOutGhosts   []Ghost
+// State indicates if its 1 Neither ruled out or found, 2 Found, or 3 Ruled out
+type Evidence struct {
+	Name  string
+	Ghost []Ghost
+	State int
 }
 
-func getNewHunt() Hunt {
-	return Hunt{PossibleEvidence: GetAllEvidence(), PossibleGhosts: GetAllGhosts()}
+type Ghost struct {
+	Name     string
+	State    int
+	Evidence []Evidence
 }
 
-func (h Hunt) RuleOutEvidence(ev Evidence) {
-	h.RuledOutEvidence = append(h.RuledOutEvidence, ev)
-}
-
-func (h Hunt) RuleOutGhost(g Ghost) {
-	h.RuledOutGhosts = append(h.RuledOutGhosts, g)
+type Investigation struct {
+	Evidence []_Evidence
+	Ghosts   []_Ghost
 }
