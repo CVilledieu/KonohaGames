@@ -69,7 +69,7 @@ func getEvidenceById(id int) Evidence {
 
 // Returns all the Ghosts that are listed by the passed in evidence
 func getGhostsByEvidence(EV Evidence) []Ghost {
-	ghosts := []Ghost{}
+	ghosts := make([]Ghost, 0)
 
 	for _, val := range EV.GhostId {
 		ghosts = append(ghosts, getGhostById(val))
@@ -79,7 +79,7 @@ func getGhostsByEvidence(EV Evidence) []Ghost {
 
 // Returns all the Ghosts that are listed by the passed in evidence
 func getEvidenceByGhosts(g Ghost) []Evidence {
-	ev := []Evidence{}
+	ev := make([]Evidence, 0)
 
 	for _, val := range g.EvidenceId {
 		ev = append(ev, getEvidenceById(val))
@@ -87,7 +87,17 @@ func getEvidenceByGhosts(g Ghost) []Evidence {
 	return ev
 }
 
-
-//Returns Possible Ghosts based on an array of evidence
-//The input array is the evidence either the player or the server has either ruled out 
-func Get
+// Returns Possible Ghosts based on an array of evidence
+// The input array is the evidence either the player or the server has either ruled out
+func GetPossibleGhosts(EVarr []Evidence) (pGhost []Ghost) {
+	notPossible := make(map[int]int)
+	for _, EV := range EVarr {
+		for _, gId := range EV.GhostId {
+			notPossible[gId] += 1
+		}
+	}
+	for key := range notPossible {
+		pGhost = append(pGhost, getGhostById(key))
+	}
+	return pGhost
+}
