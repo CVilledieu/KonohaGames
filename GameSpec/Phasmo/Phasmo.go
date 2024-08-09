@@ -1,5 +1,16 @@
 package Phasmo
 
+/*
+Default is ruled out. Info passed from server to client updates the options to no longer be ruled out
+
+When phasmo Page is loaded StartJob func should be run.
+  This sends all ghosts and evidence to the client as possible options
+When the client removes an option it updates and sends the updated Item back to the server
+  All info is then updated with the info sent back by the server
+
+This should mean that only the possible options need to be tracked instead of the state of all options
+*/
+
 type Evidence struct {
 	Id      int
 	Name    string
@@ -15,76 +26,51 @@ type Ghost struct {
 	Tip        []string
 }
 
+//Use IDs to search and deal with everything
 type Investigation struct {
-	Evidence []Evidence
-	Ghosts   []Ghost
+	Ghosts   []int
+	Evidence []int
 }
 
 // Used if reset button is pressed or a new page is loaded.
 // Sets all ghosts/evidence as possible and clears all ruled out evidence/ghosts
-func StartJob() Investigation {
-	return Investigation{Ghosts: getAllGhosts()}
+func StartNewJob() Investigation {
+	return Investigation{Ghosts: GetAllGhostIds(), Evidence: GetAllEvidenceIds()}
 }
 
-func getAllGhosts() []Ghost {
-	return []Ghost{
-		{
-			Id:         0,
-			Name:       "Spirit",
-			EvidenceId: []int{0, 1, 2},
-			Tip:        []string{"Shy Boy"},
-		},
+//Provides a clean slate. Used to set up a new Investigation or if a reset button is added
+func GetAllGhostIds() []int {
+	ghosts := make([]int, 24)
+	for i, _ := range ghosts {
+		ghosts[i] = i
 	}
+	return ghosts
 }
-
-func getAllEvidence() []Evidence {
-	return []Evidence{
-		{
-			Id:      0,
-			Name:    "Spirit Box",
-			GhostId: []int{0, 1, 2},
-		},
+func GetAllEvidenceIds() []int {
+	evidence := make([]int, 7)
+	for i, _ := range evidence {
+		evidence[i] = i
 	}
+	return evidence
 }
 
+//
 func getGhostById(id int) Ghost {
-	allGhost := getAllGhosts()
-	for _, val := range allGhost {
-		if val.Id == id {
-			return val
-		}
-	}
 	panic("Id passed in didn't match any Ghost")
 }
 
 func getEvidenceById(id int) Evidence {
-	allEvidence := getAllEvidence()
-	for _, val := range allEvidence {
-		if val.Id == id {
-			return val
-		}
-	}
 	panic("Id passed in doesnt match any Evidence")
 }
 
 // Returns all the Ghosts that are listed by the passed in evidence
-func getGhostsByEvidence(EV Evidence) []Ghost {
-	ghosts := make([]Ghost, 0)
-
-	for _, val := range EV.GhostId {
-		ghosts = append(ghosts, getGhostById(val))
-	}
-	return ghosts
+func GetGhostsByEvidence(id int) []int {
+	return getEvidenceById(id).GhostId
 }
 
 // Returns all the Ghosts that are listed by the passed in evidence
-func getEvidenceByGhosts(g Ghost) []Evidence {
-	ev := make([]Evidence, 0)
-
-	for _, val := range g.EvidenceId {
-		ev = append(ev, getEvidenceById(val))
-	}
-	return ev
+func getEvidenceByGhosts(id int) []int {
+	return getGhostById(id).EvidenceId
 }
 
 // Returns Possible Ghosts based on an array of evidence
@@ -100,4 +86,25 @@ func GetPossibleGhosts(EVarr []Evidence) (pGhost []Ghost) {
 		pGhost = append(pGhost, getGhostById(key))
 	}
 	return pGhost
+}
+
+func (job Investigation) AddEvidence(id int) {
+	evidence := getEvidenceById(id)
+	checkIfInArr()
+}
+
+func (job Investigation) AddGhost(id int) {
+
+}
+
+func (job Investigation) RemoveEvidence(id int) {
+
+}
+
+func (job Investigation) RemoveGhost(id int) {
+
+}
+
+func checkIfInArr(arr []any, id int) {
+
 }
