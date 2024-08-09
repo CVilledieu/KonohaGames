@@ -11,6 +11,11 @@ When the client removes an option it updates and sends the updated Item back to 
 This should mean that only the possible options need to be tracked instead of the state of all options
 */
 
+const (
+	GHOSTS   = 24
+	EVIDENCE = 7
+)
+
 type Evidence struct {
 	Id      int
 	Name    string
@@ -28,33 +33,26 @@ type Ghost struct {
 
 //Use IDs to search and deal with everything
 type Investigation struct {
-	Ghosts   []int
-	Evidence []int
+	Ghosts   map[int]bool
+	Evidence map[int]bool
 }
 
 // Used if reset button is pressed or a new page is loaded.
 // Sets all ghosts/evidence as possible and clears all ruled out evidence/ghosts
 func StartNewJob() Investigation {
-	return Investigation{Ghosts: GetAllGhostIds(), Evidence: GetAllEvidenceIds()}
+	return Investigation{Ghosts: SetUpInvestigation(GHOSTS), Evidence: SetUpInvestigation(EVIDENCE)}
 }
 
 //Provides a clean slate. Used to set up a new Investigation or if a reset button is added
-func GetAllGhostIds() []int {
-	ghosts := make([]int, 24)
-	for i, _ := range ghosts {
-		ghosts[i] = i
+//The Ids are simply 0-23 for ghosts and 0-6 for Evidence
+func SetUpInvestigation(t int) map[int]bool {
+	GE := make(map[int]bool, t)
+	for i := 0; i < t; i++ {
+		GE[i] = true
 	}
-	return ghosts
-}
-func GetAllEvidenceIds() []int {
-	evidence := make([]int, 7)
-	for i, _ := range evidence {
-		evidence[i] = i
-	}
-	return evidence
+	return GE //Ghost or Evidence depends what const is passed inSS
 }
 
-//
 func getGhostById(id int) Ghost {
 	panic("Id passed in didn't match any Ghost")
 }
@@ -63,48 +61,21 @@ func getEvidenceById(id int) Evidence {
 	panic("Id passed in doesnt match any Evidence")
 }
 
-// Returns all the Ghosts that are listed by the passed in evidence
+// Returns all the Ghost Ids that point to that Evidence id
 func GetGhostsByEvidence(id int) []int {
 	return getEvidenceById(id).GhostId
 }
 
-// Returns all the Ghosts that are listed by the passed in evidence
+// Returns all the Evidence Ids that point to that ghost id
 func getEvidenceByGhosts(id int) []int {
 	return getGhostById(id).EvidenceId
 }
 
-// Returns Possible Ghosts based on an array of evidence
-// The input array is the evidence either the player or the server has either ruled out
-func GetPossibleGhosts(EVarr []Evidence) (pGhost []Ghost) {
-	notPossible := make(map[int]int)
-	for _, EV := range EVarr {
-		for _, gId := range EV.GhostId {
-			notPossible[gId] += 1
-		}
-	}
-	for key := range notPossible {
-		pGhost = append(pGhost, getGhostById(key))
-	}
-	return pGhost
+//state refers to if the player or server has ruled it out or if its still an option
+func (job Investigation) UpdateEvidence(id int, state bool) {
+	job.Evidence[id] = state
 }
 
-func (job Investigation) AddEvidence(id int) {
-	evidence := getEvidenceById(id)
-	checkIfInArr()
-}
-
-func (job Investigation) AddGhost(id int) {
-
-}
-
-func (job Investigation) RemoveEvidence(id int) {
-
-}
-
-func (job Investigation) RemoveGhost(id int) {
-
-}
-
-func checkIfInArr(arr []any, id int) {
-
+func (job Investigation) UpdateGhost(id int, state bool) {
+	job.Ghosts[id] = state
 }
