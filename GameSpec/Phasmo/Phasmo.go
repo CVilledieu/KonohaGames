@@ -1,14 +1,16 @@
 package Phasmo
 
+import (
+	"encoding/json"
+	"os"
+)
+
 /*
-Default is ruled out. Info passed from server to client updates the options to no longer be ruled out
-
-When phasmo Page is loaded StartJob func should be run.
-  This sends all ghosts and evidence to the client as possible options
-When the client removes an option it updates and sends the updated Item back to the server
-  All info is then updated with the info sent back by the server
-
-This should mean that only the possible options need to be tracked instead of the state of all options
+items = Evidence
+NPC = Ghosts
+Start New Job sets all items/NPC to 0
+If an item/NPC is ruled out then it becomes -1
+If an item/NPC is found or selected it becoems 1
 */
 
 const (
@@ -17,65 +19,108 @@ const (
 )
 
 type Evidence struct {
-	Id      int
-	Name    string
-	GhostId []int
+	Id   int
+	Name string
 }
 
-// Each Ghost has 3 Evidences that are a unique set. No 2 ghosts have the same set of Evidence
-// Tip is extra info about the behaviour of the ghost
 type Ghost struct {
 	Id         int
 	Name       string
 	EvidenceId []int
-	Tip        []string
+	Notes      []string
 }
 
-//Use IDs to search and deal with everything
+// Key is the Id of the item/NPC
+// Value is the state of the item/NPC
 type Investigation struct {
-	Ghosts   map[int]bool
-	Evidence map[int]bool
+	GMap map[int]Ghost
+	EMap map[int]int
 }
 
 // Used if reset button is pressed or a new page is loaded.
-// Sets all ghosts/evidence as possible and clears all ruled out evidence/ghosts
-func StartNewJob() Investigation {
-	return Investigation{Ghosts: SetUpInvestigation(GHOSTS), Evidence: SetUpInvestigation(EVIDENCE)}
+// Sets all item/NPC as possible and clears all ruled out item/NPC
+func StartNewInvestigation() Investigation {
+	return Investigation{GMap: freshMapGhosts(), EMap: freshMapItems()}
 }
 
-//Provides a clean slate. Used to set up a new Investigation or if a reset button is added
-//The Ids are simply 0-23 for ghosts and 0-6 for Evidence
-func SetUpInvestigation(t int) map[int]bool {
-	GE := make(map[int]bool, t)
-	for i := 0; i < t; i++ {
-		GE[i] = true
+func freshMapGhosts() map[int]Ghost {
+	G := make(map[int]Ghost, GHOSTS)
+	for i := range G {
+		G[i] = getGhostById(i)
 	}
-	return GE //Ghost or Evidence depends what const is passed inSS
+	return G
+}
+
+func freshMapItems() map[int]int {
+	E := make(map[int]int, EVIDENCE)
+	for i := range E {
+		E[i] = 0
+	}
+	return E //Ghost or Evidence depends what const is passed inSS
 }
 
 func getGhostById(id int) Ghost {
-	panic("Id passed in didn't match any Ghost")
+	return readGhostJson()[id]
 }
 
-func getEvidenceById(id int) Evidence {
-	panic("Id passed in doesnt match any Evidence")
+func readGhostJson() []Ghost {
+	gJson, err := os.ReadFile("public/Database/Phasmo/Ghosts.json")
+	if err != nil {
+		panic(err)
+	}
+	gArr := make([]Ghost, GHOSTS)
+	err = json.Unmarshal(gJson, &gArr)
+	if err != nil {
+		panic(err)
+	}
+	return gArr
 }
 
-// Returns all the Ghost Ids that point to that Evidence id
-func GetGhostsByEvidence(id int) []int {
-	return getEvidenceById(id).GhostId
+func readEvidenceJson() []Evidence {
+	eJson, err := os.ReadFile("public/Database/Phasmo/Evidence.json")
+	if err != nil {
+		panic(err)
+	}
+	eArr := make([]Evidence, EVIDENCE)
+	err = json.Unmarshal(eJson, &eArr)
+	if err != nil {
+		panic(err)
+	}
+	return eArr
 }
 
-// Returns all the Evidence Ids that point to that ghost id
-func getEvidenceByGhosts(id int) []int {
-	return getGhostById(id).EvidenceId
-}
-
-//state refers to if the player or server has ruled it out or if its still an option
-func (job Investigation) UpdateEvidence(id int, state bool) {
-	job.Evidence[id] = state
+// state refers to if the player or server has ruled it out or if its still an option
+func (job Investigation) UpdateEvidence(id int, state int) {
+	job.EMap[id] = state
 }
 
 func (job Investigation) UpdateGhost(id int, state bool) {
-	job.Ghosts[id] = state
+	job.GMap[id] = state
+}
+
+func (job Investigation) GetGhostDisplay() []Ghost {
+	var display []Ghost
+	ghosts := readGhostJson()
+	for key, value := range job.GMap {
+		if value <= 0 {
+			display = append(display, ghosts[key])
+		}
+	}
+	return display
+}
+
+func (job Investigation) GetEvidenceDisplay() (Found, Unselected, CrossedOut []Evidence) {
+	evidence := readEvidenceJson()
+	for key, value := range job.EMap {
+		if value == 0 {
+			Unselected = append(Unselected, evidence[key])
+		}
+		if value == 1 {
+			Found = append(Found, evidence[key])
+		}
+		if value == -1 {
+			CrossedOut = append(CrossedOut, evidence[key])
+		}
+	}
+	return Found, Unselected, CrossedOut
 }

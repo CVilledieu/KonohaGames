@@ -1,0 +1,31 @@
+[
+    {
+        "Id":0,
+        "Name": "EMF 5"
+    },
+    {
+        "Id":1,
+        "Name": "D.O.T.s"
+    },
+    {
+        "Id":2,
+        "Name": "Ultraviolet"
+
+    },
+    {
+        "Id":3,
+        "Name": "Ghost Orbs"
+    },
+    {
+        "Id":4,
+        "Name": "Ghost Writing"
+    },
+    {
+        "Id":5,
+        "Name": "Spirit Box"
+    },
+    {
+        "Id":6,
+        "Name": "Freezing Temps"
+    }    
+]
